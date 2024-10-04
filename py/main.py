@@ -2,7 +2,7 @@ import PySimpleGUI as sg
 from submit import *
 
 # All the stuff inside your window.
-layout = [[sg.Text(text="Insert your link:", justification='center', size=(40, 1))],
+layout = [[sg.Text(text="Insert your link:", background_color='black', justification='center', size=(40, 1))],
           [sg.InputText(key='-INPUT-')],
           [sg.Button('Submit'), sg.Button('Cancel')],
           [sg.Multiline(key='-OUT-', disabled=True, size=(60, 15))]
@@ -13,6 +13,7 @@ window = sg.Window(
     'PyScraper',
     layout,
     size=(500, 500),
+    background_color='gray',
     element_justification='center',
     finalize=True
 )
@@ -26,9 +27,9 @@ while True:
         break
     if event == 'Submit':
         if urlChecker(values['-INPUT-']):
-            raw = onSubmit(values['-INPUT-'])
-            formatted = raw.replace('<', '\n<')
-            window['-OUT-'].update(formatted)
+            content = onSubmit(values['-INPUT-'])
+            # formatted = raw.replace('<', '\n<')
+            window['-OUT-'].update(content)
         else:
             sg.popup('Not a valid link!', title="Error",
                      font=("Arial Bold", 16))
