@@ -33,7 +33,7 @@ class WebScraperGUI:
 
         # ask for anything specific
         self.tag_button = ttk.Label(
-            root, text="Any specific tags? (ONLY WORKS IF YOU PRESSED SCRAPE FOR A URL)")
+            root, text="Ask our AI assistant about the parsed information!")
         self.tag_button.pack(pady=5)
 
         self.url_entry2 = ttk.Entry(root, width=80)
@@ -41,7 +41,7 @@ class WebScraperGUI:
 
         # Specific tag scrape
         self.specific_button = ttk.Button(
-            root, text="Scrape for a tag?", command=self.specific_scrape
+            root, text="Confirm", command=self.specific_scrape
         )
         self.specific_button.pack(pady=10)
 

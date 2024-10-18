@@ -1,0 +1,6 @@
+threading
+BeautifulSoup
+tkinter
+urlopen
+ollama
+requests
