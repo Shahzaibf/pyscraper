@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import tkinter as tk
 from tkinter import ttk, messagebox
+import ollama
 
 
 class WebScraperGUI:
@@ -49,6 +50,7 @@ class WebScraperGUI:
         self.results_text2 = tk.Text(root, wrap=tk.WORD, height=15)
         self.results_text2.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
+        # Status 2
         self.status_label2 = ttk.Label(root, text="Status: Idle")
         self.status_label2.pack(pady=5)
 
@@ -91,8 +93,32 @@ class WebScraperGUI:
     def update_status(self, message):
         self.status_label.config(text=f"Status: {message}")
 
-    def specific_scrape(self, tags):
-        self.results_text2.config(text="Test")
+    def specific_scrape(self):
+        data = self.url_entry.get().strip()
+        question = self.url_entry2.get().strip()
+        if not data or not question:
+            messagebox.showwarning(
+                "Input Error", "Please enter your previous URL and question.")
+            return
+        self.status_label2.config(text="Status: Sending to AI...")
+        self.tag_button.config(state=tk.DISABLED)
+        self.results_text2.delete(1.0, tk.END)
+        thread = threading.Thread(target=self.ask_ai, args=(data, question))
+        thread.start()
+
+    def ask_ai(self, data, question):
+        try:
+            response = ollama.generate(model="llama3.2",
+                                       prompt=f"{data}\n\nQuestion: {question}"
+                                       )
+            print("Response from Ollama:", response)
+            answer = response['response'] if response else "No answer."
+            self.results_text2.insert(tk.END, answer)
+            self.status_label2.config(text="Status: Answer received.")
+        except Exception as e:
+            self.status_label2.config(text=f"Error: {e}")
+        finally:
+            self.tag_button.config(state=tk.NORMAL)
 
 
 def main():
